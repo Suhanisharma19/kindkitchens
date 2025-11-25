@@ -26,15 +26,18 @@ This frontend is configured to work with the deployed backend at https://kindkit
 
 ### Installation
 ```bash
+cd frontend
 npm install
 ```
 
 ### Running the Application
 ```bash
+cd frontend
 npm run dev
 ```
 
 ### Building for Production
 ```bash
+cd frontend
 npm run build
 ```
