@@ -1,171 +1,60 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../utils/auth';
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const slideIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
-const slideInDown = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const pulse = keyframes`
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
+import api from '../utils/api';
 
 const Nav = styled.nav`
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  padding: 1.2rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  animation: ${slideInDown} 0.8s ease-out;
-  border-bottom: 1px solid rgba(236, 240, 241, 0.3);
-`;
-
-const NavContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+  background: #4CAF50;
+  padding: 0.5rem 2rem;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  box-sizing: border-box;
 `;
 
 const Logo = styled(Link)`
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #2c3e50;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 700;
   text-decoration: none;
-  background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  letter-spacing: -0.5px;
-  animation: ${slideIn} 0.8s ease-out;
-  opacity: 0;
-  animation-fill-mode: forwards;
-  
-  &:hover {
-    transform: scale(1.05);
-    animation: ${pulse} 2s infinite;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, #3498db, #2c3e50);
-    border-radius: 2px;
-  }
-`;
-
-const NavLinks = styled.div`
   display: flex;
-  gap: 1.5rem;
   align-items: center;
 `;
 
-const NavLink = styled(Link)`
+const NavMenu = styled.div`
+  display: flex;
+  gap: 2rem;
+`;
+
+const NavItem = styled(Link)`
+  color: white;
   text-decoration: none;
-  color: #34495e;
-  padding: 0.8rem 1.8rem;
-  border-radius: 50px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-weight: 600;
-  position: relative;
-  animation: ${slideIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
-  opacity: 0;
-  animation-fill-mode: forwards;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
   
   &:hover {
-    color: #3498db;
-    background-color: rgba(52, 152, 219, 0.1);
-    transform: translateY(-3px);
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #3498db, #2c3e50);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border-radius: 2px;
-  }
-  
-  &:hover::after {
-    width: 100%;
+    color: #e8f5e9;
+    text-decoration: underline;
   }
 `;
 
-const Button = styled.button`
-  background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
-  color: white;
-  border: none;
-  padding: 0.8rem 2.2rem;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-weight: 700;
-  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
-  animation: ${slideIn} 0.8s ease-out, ${fadeIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
-  opacity: 0;
-  animation-fill-mode: forwards;
-  letter-spacing: 0.5px;
+const AuthButton = styled(Link)`
+  background: white;
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+  border-radius: 25px;
+  padding: 0.6rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
   
   &:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(52, 152, 219, 0.5);
-    animation: ${pulse} 2s infinite;
-  }
-  
-  &:active {
+    background: #e8f5e9;
     transform: translateY(-2px);
   }
 `;
@@ -173,34 +62,81 @@ const Button = styled.button`
 const Navbar = () => {
   const navigate = useNavigate();
   const token = isAuthenticated();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (token) {
+        try {
+          const res = await api.get('/auth/profile');
+          setUser(res.data);
+        } catch (err) {
+          console.error('Failed to fetch user data:', err);
+        }
+      }
+    };
+
+    fetchUser();
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    setUser(null);
     navigate('/login');
+  };
+
+  const handleDonateClick = (e) => {
+    // If user is not authenticated, redirect to login
+    if (!token) {
+      e.preventDefault();
+      navigate('/login');
+    } else {
+      // If user is authenticated, prevent default and navigate to /donor
+      e.preventDefault();
+      navigate('/donor');
+    }
+  };
+
+  const handleVolunteerClick = (e) => {
+    // If user is not authenticated, redirect to login
+    if (!token) {
+      e.preventDefault();
+      navigate('/login');
+    } else {
+      // If user is authenticated, prevent default and navigate to /ngo
+      e.preventDefault();
+      navigate('/ngo');
+    }
   };
 
   return (
     <Nav>
-      <NavContainer>
-        <Logo to="/">KindKitchens</Logo>
-        <NavLinks>
-          <NavLink href="#features" delay="0.1s">Features</NavLink>
-          <NavLink href="#stats" delay="0.2s">Impact</NavLink>
-          <NavLink href="#contact" delay="0.3s">Contact</NavLink>
-          {!token ? (
-            <>
-              <NavLink to="/login" delay="0.4s">Login</NavLink>
-              <NavLink to="/register" delay="0.5s">Register</NavLink>
-            </>
-          ) : (
-            <>
-              <NavLink to="/" delay="0.4s">Home</NavLink>
-              <Button onClick={handleLogout} delay="0.5s">Logout</Button>
-            </>
-          )}
-        </NavLinks>
-      </NavContainer>
+      <Logo to="/">KindKitchens</Logo>
+      
+      <NavMenu>
+        <NavItem to="/">Home</NavItem>
+        <NavItem to={token ? "/donor" : "/login"} onClick={handleDonateClick}>Donate</NavItem>
+        <NavItem to={token ? "/ngo" : "/login"} onClick={handleVolunteerClick}>Volunteer</NavItem>
+        <NavItem to="/about">About Us</NavItem>
+        <NavItem to="/contact">Contact</NavItem>
+        {token && (
+          <NavItem to="/profile">My Profile</NavItem>
+        )}
+      </NavMenu>
+      
+      {!token ? (
+        <div>
+          <AuthButton to="/login">Login</AuthButton>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span style={{ color: 'white', fontWeight: '500' }}>
+            Hello, {user?.name || 'User'}
+          </span>
+          <AuthButton onClick={handleLogout}>Logout</AuthButton>
+        </div>
+      )}
     </Nav>
   );
 };

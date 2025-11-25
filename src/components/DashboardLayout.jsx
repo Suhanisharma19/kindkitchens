@@ -56,13 +56,13 @@ const SidebarItem = styled.div`
   border-radius: 12px;
   margin-bottom: 0.7rem;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  background: ${props => props.active ? 'rgba(52, 152, 219, 0.3)' : 'rgba(255, 255, 255, 0.1)'};
+  background: ${props => props.$active ? 'rgba(52, 152, 219, 0.3)' : 'rgba(255, 255, 255, 0.1)'};
   backdrop-filter: blur(10px);
-  border: 1px solid ${props => props.active ? 'rgba(52, 152, 219, 0.5)' : 'rgba(255, 255, 255, 0.1)'};
-  color: ${props => props.active ? '#3498db' : '#ecf0f1'};
+  border: 1px solid ${props => props.$active ? 'rgba(52, 152, 219, 0.5)' : 'rgba(255, 255, 255, 0.1)'};
+  color: ${props => props.$active ? '#3498db' : '#ecf0f1'};
   font-weight: 600;
   animation: ${slideIn} 0.5s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
   
@@ -154,8 +154,8 @@ const DashboardLayout = ({ title, children, sidebarItems, activeItem }) => {
         {sidebarItems.map((item, index) => (
           <SidebarItem
             key={index}
-            active={activeItem === index}
-            delay={`${0.1 * index}s`}
+            $active={activeItem === index}
+            $delay={`${0.1 * index}s`}
             className={activeItem === index ? 'active' : ''}
             onClick={() => item.action && item.action()}
           >

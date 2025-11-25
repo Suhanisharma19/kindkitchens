@@ -52,7 +52,7 @@ const DonationCard = styled.div`
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 1.5rem;
   border-left: 4px solid ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#4caf50';
       case 'claimed': return '#ff9800';
       case 'pickedup': return '#2196f3';
@@ -79,7 +79,7 @@ const StatusBadge = styled.span`
   font-size: 0.8rem;
   font-weight: 500;
   background-color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#e8f5e9';
       case 'claimed': return '#fff3e0';
       case 'pickedup': return '#e3f2fd';
@@ -88,7 +88,7 @@ const StatusBadge = styled.span`
     }
   }};
   color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#2e7d32';
       case 'claimed': return '#ef6c00';
       case 'pickedup': return '#1565c0';
@@ -128,11 +128,15 @@ const NGODashboard = () => {
   useEffect(() => {
     const fetchAvailableDonations = async () => {
       try {
-        const token = localStorage.getItem('token');
         const res = await api.get(`/donations/available?pincode=${searchPincode}`);
         setAvailableDonations(res.data);
       } catch (err) {
         console.error('Error fetching donations:', err);
+        // Check if it's an authentication error
+        if (err.response?.status === 401) {
+          // Don't automatically logout, just show an error message
+          alert('Authentication error. Please log in again.');
+        }
       }
     };
 
@@ -145,11 +149,15 @@ const NGODashboard = () => {
   useEffect(() => {
     const fetchMyDonations = async () => {
       try {
-        const token = localStorage.getItem('token');
         const res = await api.get('/donations/ngo');
         setMyDonations(res.data);
       } catch (err) {
         console.error('Error fetching my donations:', err);
+        // Check if it's an authentication error
+        if (err.response?.status === 401) {
+          // Don't automatically logout, just show an error message
+          alert('Authentication error. Please log in again.');
+        }
       }
     };
 
@@ -165,20 +173,23 @@ const NGODashboard = () => {
 
   const handleClaimDonation = async (donationId) => {
     try {
-      const token = localStorage.getItem('token');
       const res = await api.put(`/donations/${donationId}/claim`, {});
       
       // Update the UI
       setAvailableDonations(availableDonations.filter(d => d._id !== donationId));
       alert('Donation claimed successfully!');
     } catch (err) {
+      // Check if it's an authentication error
+      if (err.response?.status === 401) {
+        alert('Authentication error. Please log in again.');
+        return;
+      }
       alert('Error claiming donation: ' + (err.response?.data?.message || 'Unknown error'));
     }
   };
 
   const handleUpdateStatus = async (donationId, status) => {
     try {
-      const token = localStorage.getItem('token');
       const res = await api.put(`/donations/${donationId}/status`, 
         { status }
       );
@@ -190,6 +201,11 @@ const NGODashboard = () => {
       
       alert(`Status updated to ${status} successfully!`);
     } catch (err) {
+      // Check if it's an authentication error
+      if (err.response?.status === 401) {
+        alert('Authentication error. Please log in again.');
+        return;
+      }
       alert('Error updating status: ' + (err.response?.data?.message || 'Unknown error'));
     }
   };
@@ -221,20 +237,20 @@ const NGODashboard = () => {
           ) : (
             <DonationList>
               {availableDonations.map(donation => (
-                <DonationCard key={donation._id} status={donation.status}>
+                <DonationCard key={donation._id} $status={donation.status}>
                   <DonationTitle>{donation.foodType}</DonationTitle>
                   <DonationInfo><strong>Quantity:</strong> {donation.quantity} {donation.unit}</DonationInfo>
                   <DonationInfo><strong>Expires:</strong> {new Date(donation.expirationDate).toLocaleString()}</DonationInfo>
                   <DonationInfo><strong>Location:</strong> {donation.address.street}, {donation.address.city}, {donation.address.pincode}</DonationInfo>
                   <DonationInfo>
                     <strong>Status:</strong> 
-                    <StatusBadge status={donation.status}>
+                    <StatusBadge $status={donation.status}>
                       {donation.status.charAt(0).toUpperCase() + donation.status.slice(1)}
                     </StatusBadge>
                   </DonationInfo>
                   <DonationInfo>
                     <strong>Urgency:</strong> 
-                    <StatusBadge status={donation.urgencyScore > 7 ? 'claimed' : donation.urgencyScore > 4 ? 'pickedup' : 'available'}>
+                    <StatusBadge $status={donation.urgencyScore > 7 ? 'claimed' : donation.urgencyScore > 4 ? 'pickedup' : 'available'}>
                       {donation.urgencyScore > 7 ? 'High Priority' : donation.urgencyScore > 4 ? 'Medium Priority' : 'Low Priority'}
                     </StatusBadge>
                   </DonationInfo>
@@ -256,7 +272,7 @@ const NGODashboard = () => {
           ) : (
             <DonationList>
               {myDonations.map(donation => (
-                <DonationCard key={donation._id} status={donation.status}>
+                <DonationCard key={donation._id} $status={donation.status}>
                   <DonationTitle>{donation.foodType}</DonationTitle>
                   <DonationInfo><strong>Quantity:</strong> {donation.quantity} {donation.unit}</DonationInfo>
                   <DonationInfo><strong>Expires:</strong> {new Date(donation.expirationDate).toLocaleString()}</DonationInfo>
@@ -264,7 +280,7 @@ const NGODashboard = () => {
                   <DonationInfo><strong>Location:</strong> {donation.address.street}, {donation.address.city}, {donation.address.pincode}</DonationInfo>
                   <DonationInfo>
                     <strong>Status:</strong> 
-                    <StatusBadge status={donation.status}>
+                    <StatusBadge $status={donation.status}>
                       {donation.status.charAt(0).toUpperCase() + donation.status.slice(1)}
                     </StatusBadge>
                   </DonationInfo>

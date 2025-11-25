@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, getCurrentUser } from '../utils/auth';
+import backgroundImage from '../assets/res.jpg';
 
 const fadeIn = keyframes`
   from {
@@ -111,21 +112,170 @@ const grow = keyframes`
 
 const HomeContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #ffffff;
+  font-family: 'Inter', 'Poppins', sans-serif;
   overflow-x: hidden;
-  animation: ${fadeIn} 0.5s ease-out;
 `;
 
-
-
 const HeroSection = styled.section`
-  padding: 8rem 2rem;
-  background: linear-gradient(120deg, #e0f7fa 0%, #f8f9fa 100%);
+  width: 100%;
+  height: 80vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  color: white;
+  position: relative;
+`;
+
+const HeroContent = styled.div`
+  max-width: 800px;
+  padding: 0 2rem;
+`;
+
+const HeroTitle = styled.h1`
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+const HeroSubtitle = styled.p`
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const PrimaryButton = styled.button`
+  background: #FF9800;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const SecondaryButton = styled(PrimaryButton)`
+  background: white;
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+`;
+
+const HowItWorksSection = styled.section`
+  padding: 5rem 2rem;
+  background: white;
+`;
+
+const SectionContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 3.5rem;
+  color: #2c3e50;
+  position: relative;
+  display: inline-block;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #4CAF50, #FF9800);
+    border-radius: 2px;
+  }
+`;
+
+const CardsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const Card = styled.div`
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 300px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const CardIcon = styled.div`
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+`;
+
+const CardDescription = styled.p`
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.5;
+`;
+
+const StatsSection = styled.section`
+  padding: 4rem 2rem;
+  background: linear-gradient(rgba(248, 251, 255, 0.9), rgba(248, 251, 255, 0.9)), 
+              url('https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #0d1b2a;
   position: relative;
   overflow: hidden;
-  animation: ${fadeIn} 0.5s ease-out;
+  animation: ${fadeIn} 0.6s ease-out;
+  border-top: 1px solid #e8eef8;
+  border-bottom: 1px solid #e8eef8;
   
   &::before {
     content: '';
@@ -134,137 +284,126 @@ const HeroSection = styled.section`
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, #e0f7fa, #e8f5e9, #fff3e0);
-    background-size: 400% 400%;
-    animation: ${wave} 15s ease infinite;
-    opacity: 0.7;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='1' fill='%231a73e8' fill-opacity='0.08'/%3E%3C/svg%3E");
+    background-size: 25px 25px;
   }
 `;
 
-const HeroContainer = styled.div`
+const StatsContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  text-align: left;
-  animation: ${slideInUp} 1s ease-out, ${grow} 0.8s ease-out;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
   position: relative;
   z-index: 2;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
+  animation: ${fadeIn} 0.7s ease-out;
 `;
 
-const HeroContent = styled.div`
-  text-align: left;
-  animation: ${slideInLeft} 1s ease-out, ${grow} 0.8s ease-out;
-  
-  @media (max-width: 768px) {
-    text-align: center;
-  }
-`;
-
-const HeroVisual = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: ${slideInRight} 1s ease-out, ${grow} 0.8s ease-out;
-`;
-
-const FoodIcons = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.8rem;
-  font-size: 3rem;
-  color: #0d47a1;
-  opacity: 0.9;
-  filter: drop-shadow(0 5px 15px rgba(13, 71, 161, 0.2));
-`;
-
-const FoodIcon = styled.div`
-  animation: ${bounce} 4s ease-in-out infinite;
-  opacity: 0.8;
-  
-  &:nth-child(1) { animation-delay: 0s; }
-  &:nth-child(2) { animation-delay: 0.5s; }
-  &:nth-child(3) { animation-delay: 1s; }
-  &:nth-child(4) { animation-delay: 1.5s; }
-`;
-
-const Title = styled.h1`
-  font-size: 3.2rem;
-  color: #1a237e;
-  margin-bottom: 1.5rem;
-  line-height: 1.3;
-  font-weight: 800;
-  animation: ${slideInLeft} 1s ease-out, ${grow} 0.8s ease-out;
-  position: relative;
-  
-  @media (max-width: 768px) {
-    font-size: 2.3rem;
-  }
-`;
-
-const Highlight = styled.span`
-  color: #0d47a1;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #0d47a1, #1976d2);
-    border-radius: 2px;
-  }
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.2rem;
-  color: #455a64;
-  margin-bottom: 2.5rem;
-  line-height: 1.7;
-  max-width: 650px;
-  animation: ${slideInRight} 1s ease-out 0.3s, ${grow} 0.8s ease-out 0.3s;
-  opacity: 0;
-  animation-fill-mode: forwards;
-  font-weight: 400;
-  
-  @media (max-width: 768px) {
-    margin: 0 auto 2.5rem;
-  }
-`;
-
-const Button = styled.button`
-  background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
-  color: white;
-  border: none;
-  padding: 1.2rem 2.8rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  box-shadow: 0 10px 25px rgba(13, 71, 161, 0.3);
-  animation: ${heartbeat} 3s infinite, ${grow} 0.8s ease-out;
-  letter-spacing: 0.5px;
+const StatCard = styled.div`
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(26, 115, 232, 0.1);
+  text-align: center;
+  border: 1px solid rgba(26, 115, 232, 0.08);
+  transition: all 0.3s ease;
+  animation: ${fadeIn} 0.7s ease-out, ${grow} 0.6s ease-out;
   position: relative;
   overflow: hidden;
   
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(13, 71, 161, 0.4);
-    animation: none;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 10px 30px rgba(26, 115, 232, 0.15);
   }
   
-  &:active {
-    transform: translateY(-2px);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #1a73e8, #0d47a1);
+  }
+`;
+
+const StatNumber = styled.div`
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #0d1b2a;
+  animation: ${pulse} 3s infinite, ${grow} 0.6s ease-out;
+`;
+
+const StatLabel = styled.div`
+  font-size: 1rem;
+  font-weight: 500;
+  color: #5f6368;
+  opacity: 0.85;
+  animation: ${fadeIn} 0.7s ease-out;
+`;
+
+const FeaturesSection = styled.section`
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='%234CAF50' fill-opacity='0.05'/%3E%3Ccircle cx='80' cy='80' r='1' fill='%23FF9800' fill-opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 30px 30px;
+  }
+`;
+
+const FeaturesContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  animation: ${fadeIn} 0.7s ease-out;
+`;
+
+const FeaturesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+`;
+
+const FeatureCard = styled.div`
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  animation: ${fadeIn} 0.7s ease-out, ${grow} 0.6s ease-out;
+  animation-delay: ${props => props.$delay || '0s'};
+  opacity: 0;
+  animation-fill-mode: forwards;
+  
+  &:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #4CAF50, #FF9800);
   }
   
   &::after {
@@ -274,7 +413,7 @@ const Button = styled.button`
     left: -50%;
     width: 200%;
     height: 200%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(76, 175, 80, 0.03);
     transform: rotate(30deg);
     transition: all 0.6s ease;
   }
@@ -284,208 +423,42 @@ const Button = styled.button`
   }
 `;
 
-const StatsSection = styled.section`
-  padding: 5rem 2rem;
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  color: #1a237e;
-  position: relative;
-  overflow: hidden;
-  animation: ${fadeIn} 0.5s ease-out;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='1' fill='%231a237e' fill-opacity='0.1'/%3E%3C/svg%3E");
-    background-size: 20px 20px;
-  }
-`;
-
-const StatsContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  position: relative;
-  z-index: 2;
-  animation: ${fadeIn} 0.8s ease-out;
-`;
-
-const StatCard = styled.div`
-  background: rgba(255, 255, 255, 0.85);
-  padding: 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(25, 118, 210, 0.15);
-  text-align: center;
-  border: 1px solid rgba(13, 71, 161, 0.1);
-  transition: all 0.3s ease;
-  animation: ${fadeIn} 0.8s ease-out, ${grow} 0.8s ease-out;
-  position: relative;
-  overflow: hidden;
-  
-  &:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 15px 40px rgba(25, 118, 210, 0.25);
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #0d47a1, #1976d2);
-  }
-`;
-
-const StatNumber = styled.div`
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 1.2rem;
-  color: #0d47a1;
-  animation: ${pulse} 4s infinite, ${grow} 0.8s ease-out;
-`;
-
-const StatLabel = styled.div`
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #455a64;
-  opacity: 0.9;
-  animation: ${fadeIn} 0.8s ease-out;
-`;
-
-const FeaturesSection = styled.section`
-  padding: 6rem 2rem;
-  background: linear-gradient(135deg, #f5f9ff 0%, #e8f4fc 100%);
-  position: relative;
-  animation: ${fadeIn} 0.5s ease-out;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='%230d47a1' fill-opacity='0.05'/%3E%3Ccircle cx='30' cy='30' r='1' fill='%230d47a1' fill-opacity='0.05'/%3E%3Ccircle cx='70' cy='70' r='1' fill='%230d47a1' fill-opacity='0.05'/%3E%3C/svg%3E");
-    opacity: 0.3;
-  }
-`;
-
-const FeaturesContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-  animation: ${fadeIn} 0.8s ease-out;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 2.3rem;
-  color: #1a237e;
-  margin-bottom: 1rem;
-  font-weight: 800;
-  position: relative;
-  display: inline-block;
-  animation: ${grow} 0.8s ease-out;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70px;
-    height: 4px;
-    background: linear-gradient(90deg, #0d47a1, #1976d2);
-    border-radius: 2px;
-  }
-`;
-
-const SectionSubtitle = styled.p`
-  font-size: 1.1rem;
-  color: #455a64;
-  margin-bottom: 3rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 400;
-  animation: ${fadeIn} 0.8s ease-out;
-`;
-
-const FeaturesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2.5rem;
-`;
-
-const FeatureCard = styled.div`
-  background: rgba(255, 255, 255, 0.9);
-  padding: 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 15px 35px rgba(13, 71, 161, 0.1);
-  text-align: center;
-  transition: all 0.4s ease;
-  border: 1px solid rgba(13, 71, 161, 0.05);
-  position: relative;
-  overflow: hidden;
-  animation: ${fadeIn} 0.8s ease-out, ${grow} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
-  opacity: 0;
-  animation-fill-mode: forwards;
-  
-  &:hover {
-    transform: translateY(-15px);
-    box-shadow: 0 20px 45px rgba(13, 71, 161, 0.15);
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #0d47a1, #1976d2);
-  }
-`;
-
 const FeatureIcon = styled.div`
-  font-size: 2.8rem;
-  margin-bottom: 1.3rem;
-  color: #0d47a1;
-  animation: ${bounce} 3s infinite;
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #4CAF50, #FF9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: ${bounce} 2.5s infinite;
 `;
 
 const FeatureTitle = styled.h3`
-  font-size: 1.4rem;
-  color: #1a237e;
+  font-size: 1.5rem;
+  color: #2c3e50;
   margin-bottom: 1rem;
-  font-weight: 700;
-  animation: ${fadeIn} 0.8s ease-out;
+  font-weight: 800;
+  animation: ${fadeIn} 0.7s ease-out;
 `;
 
 const FeatureDescription = styled.p`
-  font-size: 1rem;
-  color: #455a64;
+  font-size: 1.05rem;
+  color: #6c757d;
   line-height: 1.7;
   margin-bottom: 0;
-  animation: ${fadeIn} 0.8s ease-out;
+  animation: ${fadeIn} 0.7s ease-out;
 `;
 
 const CTASection = styled.section`
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   text-align: center;
   color: white;
   position: relative;
   overflow: hidden;
-  animation: ${fadeIn} 0.5s ease-out;
   
   &::before {
     content: '';
@@ -504,14 +477,15 @@ const CTAContainer = styled.div`
   margin: 0 auto;
   position: relative;
   z-index: 2;
-  animation: ${fadeIn} 0.8s ease-out;
 `;
 
 const CTATitle = styled.h2`
-  font-size: 2.5rem;
-  margin-bottom: 1.3rem;
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
   font-weight: 800;
-  animation: ${slideInUp} 1s ease-out, ${grow} 0.8s ease-out;
+  animation: ${slideInUp} 0.8s ease-out, ${grow} 0.6s ease-out;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const CTASubtitle = styled.p`
@@ -520,29 +494,31 @@ const CTASubtitle = styled.p`
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  opacity: 0.9;
-  animation: ${slideInUp} 1s ease-out 0.3s, ${grow} 0.8s ease-out 0.3s;
+  opacity: 0.95;
+  animation: ${slideInUp} 0.8s ease-out 0.2s, ${grow} 0.6s ease-out 0.2s;
   opacity: 0;
   animation-fill-mode: forwards;
+  line-height: 1.7;
 `;
 
 const CTAButton = styled.button`
-  background: white;
-  color: #0d47a1;
+  background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+  color: white;
   border: none;
-  padding: 1.2rem 3rem;
+  padding: 1.3rem 3rem;
   font-size: 1.1rem;
   font-weight: 700;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: ${heartbeat} 3s infinite, ${grow} 0.8s ease-out 0.6s;
+  animation: ${heartbeat} 2.5s infinite, ${grow} 0.6s ease-out 0.5s;
   opacity: 0;
   animation-fill-mode: forwards;
   letter-spacing: 0.5px;
   position: relative;
   overflow: hidden;
+  text-transform: uppercase;
   
   &:hover {
     transform: translateY(-5px);
@@ -561,9 +537,9 @@ const CTAButton = styled.button`
     left: -50%;
     width: 200%;
     height: 200%;
-    background: rgba(13, 71, 161, 0.1);
+    background: rgba(255, 255, 255, 0.1);
     transform: rotate(30deg);
-    transition: all 0.6s ease;
+    transition: all 0.5s ease;
   }
   
   &:hover::after {
@@ -572,12 +548,16 @@ const CTAButton = styled.button`
 `;
 
 const Footer = styled.footer`
-  background: #0d47a1;
+  background: linear-gradient(rgba(13, 27, 42, 0.9), rgba(13, 27, 42, 0.9)), 
+              url('https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   text-align: center;
   padding: 2rem 2rem;
   position: relative;
-  animation: ${fadeIn} 0.5s ease-out;
+  animation: ${fadeIn} 0.6s ease-out;
   
   &::before {
     content: '';
@@ -585,8 +565,8 @@ const Footer = styled.footer`
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, #1976d2, #0d47a1);
+    height: 2px;
+    background: linear-gradient(90deg, #1a73e8, #0d47a1);
   }
 `;
 
@@ -624,43 +604,86 @@ const Home = () => {
     }
   };
 
+  const handleDonateClick = () => {
+    if (token) {
+      if (user.role === 'donor') {
+        navigate('/donor');
+      } else {
+        // If user is logged in but not a donor, redirect to donor registration or show message
+        alert('You need to be registered as a donor to access this feature.');
+      }
+    } else {
+      navigate('/register');
+    }
+  };
+
+  const handleVolunteerClick = () => {
+    if (token) {
+      if (user.role === 'ngo') {
+        navigate('/ngo');
+      } else {
+        // If user is logged in but not an NGO, redirect to NGO registration or show message
+        alert('You need to be registered as an NGO to access this feature.');
+      }
+    } else {
+      navigate('/register');
+    }
+  };
+
   return (
     <HomeContainer>
       <HeroSection>
-        <HeroContainer>
-          <HeroContent>
-            <Title>
-              Transform <Highlight>Surplus Food</Highlight> Into <Highlight>Community Impact</Highlight>
-            </Title>
-            <Subtitle>
-              KindKitchens connects compassionate donors with local NGOs to ensure no food goes to waste 
-              while nourishing communities in need. Join our mission to create a hunger-free future.
-            </Subtitle>
-            <Button onClick={handleGetStarted}>
-              {token ? 'Go to Dashboard' : 'Get Started'}
-            </Button>
-          </HeroContent>
-          <HeroVisual>
-            <FoodIcons>
-              <FoodIcon>爱心</FoodIcon>
-              <FoodIcon>🥡</FoodIcon>
-              <FoodIcon>🥗</FoodIcon>
-              <FoodIcon>🍞</FoodIcon>
-            </FoodIcons>
-          </HeroVisual>
-        </HeroContainer>
+        <HeroContent>
+          <HeroTitle>Rescue Food, Feed Communities!</HeroTitle>
+          <HeroSubtitle>
+            Donate surplus food and reduce waste, or volunteer to help deliver food to those in need.
+          </HeroSubtitle>
+          <ButtonGroup>
+            <PrimaryButton onClick={handleDonateClick}>Donate Food</PrimaryButton>
+            <SecondaryButton onClick={handleVolunteerClick}>Volunteer</SecondaryButton>
+          </ButtonGroup>
+        </HeroContent>
       </HeroSection>
+
+      <HowItWorksSection>
+        <SectionContainer>
+          <SectionTitle>How It Works</SectionTitle>
+          <CardsContainer>
+            <Card>
+              <CardIcon>🍽️</CardIcon>
+              <CardTitle>Donate Food</CardTitle>
+              <CardDescription>
+                Post your surplus food items with details about type, quantity, and pickup location.
+              </CardDescription>
+            </Card>
+            <Card>
+              <CardIcon>✅</CardIcon>
+              <CardTitle>We Pick & Check Quality</CardTitle>
+              <CardDescription>
+                Our team collects the food and ensures it meets quality and safety standards.
+              </CardDescription>
+            </Card>
+            <Card>
+              <CardIcon>🤝</CardIcon>
+              <CardTitle>Distribute to Needy People</CardTitle>
+              <CardDescription>
+                We deliver the food to local NGOs who distribute it to communities in need.
+              </CardDescription>
+            </Card>
+          </CardsContainer>
+        </SectionContainer>
+      </HowItWorksSection>
 
       <StatsSection id="stats">
         <StatsContainer>
           <StatCard>
             <StatNumber>{stats.foodSaved}+</StatNumber>
-            <StatLabel>KG Food Saved</StatLabel>
+            <StatLabel>Tons of Food Saved</StatLabel>
           </StatCard>
           
           <StatCard>
             <StatNumber>{stats.peopleServed}+</StatNumber>
-            <StatLabel>People Served</StatLabel>
+            <StatLabel>Meals Provided</StatLabel>
           </StatCard>
           
           <StatCard>
@@ -670,7 +693,7 @@ const Home = () => {
           
           <StatCard>
             <StatNumber>{stats.partnerNgos}+</StatNumber>
-            <StatLabel>Partner NGOs</StatLabel>
+            <StatLabel>Community Partners</StatLabel>
           </StatCard>
         </StatsContainer>
       </StatsSection>
@@ -678,12 +701,9 @@ const Home = () => {
       <FeaturesSection id="features">
         <FeaturesContainer>
           <SectionTitle>How We Create Impact</SectionTitle>
-          <SectionSubtitle>
-            Our platform empowers donors and NGOs to transform surplus food into community nourishment
-          </SectionSubtitle>
           
           <FeaturesGrid>
-            <FeatureCard delay="0.1s">
+            <FeatureCard $delay="0.1s">
               <FeatureIcon>📤</FeatureIcon>
               <FeatureTitle>For Donors</FeatureTitle>
               <FeatureDescription>
@@ -692,7 +712,7 @@ const Home = () => {
               </FeatureDescription>
             </FeatureCard>
             
-            <FeatureCard delay="0.3s">
+            <FeatureCard $delay="0.3s">
               <FeatureIcon>📥</FeatureIcon>
               <FeatureTitle>For NGOs</FeatureTitle>
               <FeatureDescription>
@@ -701,7 +721,7 @@ const Home = () => {
               </FeatureDescription>
             </FeatureCard>
             
-            <FeatureCard delay="0.5s">
+            <FeatureCard $delay="0.5s">
               <FeatureIcon>📊</FeatureIcon>
               <FeatureTitle>Impact Tracking</FeatureTitle>
               <FeatureDescription>

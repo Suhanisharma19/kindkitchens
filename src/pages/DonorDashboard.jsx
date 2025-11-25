@@ -114,7 +114,7 @@ const Form = styled.form`
 const FormGroup = styled.div`
   margin-bottom: 1.5rem;
   animation: ${fadeIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
 `;
@@ -182,7 +182,7 @@ const Button = styled.button`
   margin-right: 1rem;
   box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
   animation: ${fadeIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
   
@@ -209,7 +209,7 @@ const SecondaryButton = styled.button`
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 10px 25px rgba(149, 165, 166, 0.3);
   animation: ${fadeIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
   
@@ -238,7 +238,7 @@ const DonationCard = styled.div`
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   padding: 1.8rem;
   border-left: 5px solid ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#27ae60';
       case 'claimed': return '#f39c12';
       case 'pickedup': return '#3498db';
@@ -249,7 +249,7 @@ const DonationCard = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.5);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: ${slideIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
   
@@ -299,7 +299,7 @@ const StatusBadge = styled.span`
   font-size: 0.9rem;
   font-weight: 600;
   background-color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#e8f5e9';
       case 'claimed': return '#fff3e0';
       case 'pickedup': return '#e3f2fd';
@@ -308,7 +308,7 @@ const StatusBadge = styled.span`
     }
   }};
   color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#27ae60';
       case 'claimed': return '#f39c12';
       case 'pickedup': return '#3498db';
@@ -479,7 +479,7 @@ const DonorDashboard = () => {
             <DashboardTitle>Post New Donation</DashboardTitle>
           </DashboardHeader>
           <Form onSubmit={handleSubmit}>
-            <FormGroup delay="0.1s">
+            <FormGroup $delay="0.1s">
               <Label>Food Type</Label>
               <Input
                 type="text"
@@ -488,11 +488,11 @@ const DonorDashboard = () => {
                 onChange={handleChange}
                 required
                 placeholder="e.g., Rice and Curry, Bread and Jam"
-                delay="0.1s"
+                $delay="0.1s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.2s">
+            <FormGroup $delay="0.2s">
               <Label>Quantity</Label>
               <Input
                 type="number"
@@ -502,18 +502,18 @@ const DonorDashboard = () => {
                 required
                 min="1"
                 placeholder="Enter quantity"
-                delay="0.2s"
+                $delay="0.2s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.3s">
+            <FormGroup $delay="0.3s">
               <Label>Unit</Label>
               <Select
                 name="unit"
                 value={formData.unit}
                 onChange={handleChange}
                 required
-                delay="0.3s"
+                $delay="0.3s"
               >
                 <option value="kg">Kilograms</option>
                 <option value="grams">Grams</option>
@@ -523,7 +523,7 @@ const DonorDashboard = () => {
               </Select>
             </FormGroup>
 
-            <FormGroup delay="0.4s">
+            <FormGroup $delay="0.4s">
               <Label>Expiration Date & Time</Label>
               <Input
                 type="datetime-local"
@@ -531,11 +531,11 @@ const DonorDashboard = () => {
                 value={formData.expirationDate}
                 onChange={handleChange}
                 required
-                delay="0.4s"
+                $delay="0.4s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.5s">
+            <FormGroup $delay="0.5s">
               <Label>Street Address</Label>
               <Input
                 type="text"
@@ -544,11 +544,11 @@ const DonorDashboard = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter street address"
-                delay="0.5s"
+                $delay="0.5s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.6s">
+            <FormGroup $delay="0.6s">
               <Label>City</Label>
               <Input
                 type="text"
@@ -557,11 +557,11 @@ const DonorDashboard = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter city"
-                delay="0.6s"
+                $delay="0.6s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.7s">
+            <FormGroup $delay="0.7s">
               <Label>State</Label>
               <Input
                 type="text"
@@ -570,11 +570,11 @@ const DonorDashboard = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter state"
-                delay="0.7s"
+                $delay="0.7s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.8s">
+            <FormGroup $delay="0.8s">
               <Label>Pincode</Label>
               <Input
                 type="text"
@@ -583,11 +583,11 @@ const DonorDashboard = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter pincode"
-                delay="0.8s"
+                $delay="0.8s"
               />
             </FormGroup>
 
-            <FormGroup delay="0.9s">
+            <FormGroup $delay="0.9s">
               <Label>Upload Image</Label>
               <Input
                 type="file"
@@ -597,8 +597,8 @@ const DonorDashboard = () => {
             </FormGroup>
 
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-              <Button type="submit" delay="1s">Post Donation</Button>
-              <SecondaryButton type="button" delay="1.1s" onClick={() => {
+              <Button type="submit" $delay="1s">Post Donation</Button>
+              <SecondaryButton type="button" $delay="1.1s" onClick={() => {
                 setFormData({
                   foodType: '',
                   quantity: '',
@@ -630,14 +630,14 @@ const DonorDashboard = () => {
           {donations.length === 0 ? (
             <EmptyState>
               <p>You haven't posted any food donations yet. Start making a difference by sharing your surplus food with those in need.</p>
-              <Button onClick={() => setActiveTab(0)} style={{ marginTop: '1.5rem' }} delay="0.3s">
+              <Button onClick={() => setActiveTab(0)} style={{ marginTop: '1.5rem' }} $delay="0.3s">
                 Post Your First Donation
               </Button>
             </EmptyState>
           ) : (
             <DonationList>
               {donations.map((donation, index) => (
-                <DonationCard key={donation._id} status={donation.status} delay={`${0.1 * index}s`}>
+                <DonationCard key={donation._id} $status={donation.status} $delay={`${0.1 * index}s`}>
                   <DonationTitle>{donation.foodType}</DonationTitle>
                   
                   <DonationInfo>
@@ -658,7 +658,7 @@ const DonorDashboard = () => {
                   <DonationInfo>
                     <InfoLabel>Status:</InfoLabel>
                     <InfoValue>
-                      <StatusBadge status={donation.status}>
+                      <StatusBadge $status={donation.status}>
                         {donation.status}
                       </StatusBadge>
                     </InfoValue>

@@ -2,15 +2,28 @@ import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../utils/api';
+import backgroundImage from '../assets/res.jpg';
 
+// Animations
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+`;
+
+const slideIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 `;
 
@@ -19,7 +32,7 @@ const float = keyframes`
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-15px);
+    transform: translateY(-10px);
   }
   100% {
     transform: translateY(0px);
@@ -31,31 +44,9 @@ const pulse = keyframes`
     transform: scale(1);
   }
   50% {
-    transform: scale(1.03);
+    transform: scale(1.05);
   }
   100% {
-    transform: scale(1);
-  }
-`;
-
-const slideIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
-const zoomIn = keyframes`
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
     transform: scale(1);
   }
 `;
@@ -65,35 +56,24 @@ const LoginPageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 1rem;
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(52, 152, 219, 0.05) 0%, transparent 70%);
-    z-index: -1;
-  }
 `;
 
 const LoginCard = styled.div`
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 3rem;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 14px;
+  padding: 1.2rem;
   width: 100%;
-  max-width: 500px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  animation: ${fadeIn} 0.8s ease-out;
+  max-width: 350px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.15);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(6px);
   
   &::before {
     content: '';
@@ -101,43 +81,39 @@ const LoginCard = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, #3498db, #2c3e50);
+    height: 3px;
+    background: linear-gradient(90deg, #4CAF50, #81C784, #4CAF50);
+    background-size: 200% 200%;
+    animation: ${pulse} 3s ease-in-out infinite;
   }
 `;
 
 const LogoSection = styled.div`
   text-align: center;
-  margin-bottom: 2.5rem;
-  animation: ${fadeIn} 0.8s ease-out;
+  margin-bottom: 1.2rem;
 `;
 
 const Logo = styled.div`
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 0.2rem;
+  color: #4CAF50;
   font-weight: 800;
-  background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: ${float} 4s ease-in-out infinite;
+  animation: ${float} 3s ease-in-out infinite;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+  color: #2E7D32;
+  margin-bottom: 0.1rem;
   font-weight: 700;
-  font-size: 2rem;
-  animation: ${fadeIn} 0.8s ease-out 0.2s;
-  opacity: 0;
-  animation-fill-mode: forwards;
+  font-size: 1.3rem;
+  animation: ${fadeIn} 0.6s ease-out;
 `;
 
 const Subtitle = styled.p`
-  color: #7f8c8d;
-  font-size: 1.1rem;
-  animation: ${fadeIn} 0.8s ease-out 0.3s;
+  color: #757575;
+  font-size: 0.8rem;
+  animation: ${fadeIn} 0.6s ease-out 0.2s;
   opacity: 0;
   animation-fill-mode: forwards;
 `;
@@ -148,119 +124,181 @@ const Form = styled.form`
 `;
 
 const FormGroup = styled.div`
-  margin-bottom: 1.8rem;
-  animation: ${fadeIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  margin-bottom: 1rem;
+  animation: ${slideIn} 0.5s ease-out;
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
 `;
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 0.7rem;
-  color: #2c3e50;
-  font-weight: 600;
-  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  color: #424242;
+  font-weight: 500;
+  font-size: 0.85rem;
+`;
+
+const InputContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 1rem;
-  border: 2px solid #e1e8ed;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  padding: 0.7rem;
+  padding-right: 2.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.7);
   
   &:focus {
     outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
-    background: white;
-  }
-  
-  &:hover {
-    border-color: #3498db;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
   }
 `;
 
+const EyeIcon = styled.span`
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #757575;
+  user-select: none;
+`;
+
 const Button = styled.button`
-  background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
   color: white;
   border: none;
-  padding: 1.2rem;
-  font-size: 1.1rem;
+  padding: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  margin-top: 0.5rem;
-  box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
-  animation: ${fadeIn} 0.8s ease-out 0.6s;
+  transition: all 0.3s ease;
+  margin-top: 0.3rem;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  animation: ${fadeIn} 0.6s ease-out 0.4s;
   opacity: 0;
   animation-fill-mode: forwards;
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(52, 152, 219, 0.4);
-    animation: ${pulse} 2s infinite;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
   }
   
   &:active {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 `;
 
+const SocialLoginContainer = styled.div`
+  margin: 1rem 0;
+  text-align: center;
+  animation: ${fadeIn} 0.6s ease-out 0.5s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+`;
+
+const SocialTitle = styled.p`
+  color: #757575;
+  margin-bottom: 0.6rem;
+  position: relative;
+  font-size: 0.8rem;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: #ddd;
+  }
+  
+  &::before {
+    left: 0;
+  }
+  
+  &::after {
+    right: 0;
+  }
+`;
+
+const SocialButtons = styled.div`
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+`;
+
+const SocialButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const GoogleButton = styled(SocialButton)`
+  background: #fff;
+  color: #DB4437;
+  border: 1px solid #ddd;
+`;
+
+const FacebookButton = styled(SocialButton)`
+  background: #4267B2;
+  color: white;
+`;
+
 const ErrorMessage = styled.div`
-  color: #e74c3c;
-  background-color: #fdf2f2;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.8rem;
-  border-left: 4px solid #e74c3c;
-  box-shadow: 0 5px 15px rgba(231, 76, 60, 0.1);
-  animation: ${fadeIn} 0.5s ease-out;
+  color: #f44336;
+  background-color: #ffebee;
+  padding: 0.7rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  border-left: 2px solid #f44336;
+  animation: ${fadeIn} 0.3s ease-out;
 `;
 
 const LinkContainer = styled.div`
   text-align: center;
-  margin-top: 2rem;
-  animation: ${fadeIn} 0.8s ease-out 0.7s;
+  margin-top: 1rem;
+  animation: ${fadeIn} 0.6s ease-out 0.6s;
   opacity: 0;
   animation-fill-mode: forwards;
 `;
 
 const StyledLink = styled(Link)`
-  color: #3498db;
+  color: #4CAF50;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 0.85rem;
   transition: all 0.3s ease;
-  position: relative;
-  padding: 0.2rem 0;
   
   &:hover {
-    color: #2980b9;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #3498db;
-    transition: width 0.3s ease;
-  }
-  
-  &:hover::after {
-    width: 100%;
+    color: #2E7D32;
+    text-decoration: underline;
   }
 `;
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -290,44 +328,77 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      // This would typically redirect to your backend OAuth endpoint
+      window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/auth/google`;
+    } catch (err) {
+      setError('Failed to initiate Google login');
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      // This would typically redirect to your backend OAuth endpoint
+      window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/auth/facebook`;
+    } catch (err) {
+      setError('Failed to initiate Facebook login');
+    }
+  };
+
   return (
     <LoginPageContainer>
       <LoginCard>
         <LogoSection>
           <Logo>KindKitchens</Logo>
           <Title>Welcome Back</Title>
-          <Subtitle>Sign in to your account</Subtitle>
+          <Subtitle>Sign in to continue</Subtitle>
         </LogoSection>
         
         {error && <ErrorMessage>{error}</ErrorMessage>}
         
         <Form onSubmit={handleSubmit}>
-          <FormGroup delay="0.3s">
+          <FormGroup $delay="0.1s">
             <Label>Email Address</Label>
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Enter your email"
-              delay="0.4s"
+              placeholder="your@email.com"
             />
           </FormGroup>
 
-          <FormGroup delay="0.4s">
+          <FormGroup $delay="0.2s">
             <Label>Password</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter your password"
-              delay="0.6s"
-            />
+            <InputContainer>
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+              <EyeIcon onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? '🙊' : '🐵'}
+              </EyeIcon>
+            </InputContainer>
           </FormGroup>
 
           <Button type="submit">Sign In</Button>
         </Form>
+        
+        <SocialLoginContainer>
+          <SocialTitle>Or sign in with</SocialTitle>
+          <SocialButtons>
+            <GoogleButton onClick={handleGoogleLogin}>
+              <span>G</span>
+            </GoogleButton>
+            <FacebookButton onClick={handleFacebookLogin}>
+              <span>f</span>
+            </FacebookButton>
+          </SocialButtons>
+        </SocialLoginContainer>
         
         <LinkContainer>
           Don't have an account? <StyledLink to="/register">Create one</StyledLink>

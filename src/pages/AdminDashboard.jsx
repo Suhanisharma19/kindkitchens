@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import DashboardLayout from '../components/DashboardLayout';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
+import FoodQualityDashboard from '../components/FoodQualityDashboard';
 import api from '../utils/api';
+import { getQualityLevelColor } from '../utils/foodQualityUtils';
 
 const fadeIn = keyframes`
   from {
@@ -55,7 +58,7 @@ const StatCard = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.5);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: ${slideIn} 0.8s ease-out;
-  animation-delay: ${props => props.delay || '0s'};
+  animation-delay: ${props => props.$delay || '0s'};
   opacity: 0;
   animation-fill-mode: forwards;
   position: relative;
@@ -143,7 +146,7 @@ const StatusBadge = styled.span`
   font-size: 0.9rem;
   font-weight: 600;
   background-color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#e8f5e9';
       case 'claimed': return '#fff3e0';
       case 'pickedup': return '#e3f2fd';
@@ -153,7 +156,7 @@ const StatusBadge = styled.span`
     }
   }};
   color: ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'available': return '#27ae60';
       case 'claimed': return '#f39c12';
       case 'pickedup': return '#3498db';
@@ -168,7 +171,7 @@ const StatusBadge = styled.span`
 
 const ActionButton = styled.button`
   background: ${props => {
-    switch (props.type) {
+    switch (props.$type) {
       case 'block': return 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
       case 'unblock': return 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
       default: return 'linear-gradient(135deg, #3498db 0%, #2c3e50 100%)';
@@ -223,8 +226,10 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     { label: 'Dashboard', action: () => setActiveTab(0) },
-    { label: 'Users', action: () => setActiveTab(1) },
-    { label: 'Donations', action: () => setActiveTab(2) }
+    { label: 'Analytics', action: () => setActiveTab(1) },
+    { label: 'Users', action: () => setActiveTab(2) },
+    { label: 'Donations', action: () => setActiveTab(3) },
+    { label: 'Food Quality', action: () => setActiveTab(4) }
   ];
 
   // Fetch stats
@@ -256,7 +261,7 @@ const AdminDashboard = () => {
       }
     };
 
-    if (activeTab === 1) {
+    if (activeTab === 2) {
       fetchUsers();
     }
   }, [activeTab]);
@@ -273,7 +278,7 @@ const AdminDashboard = () => {
       }
     };
 
-    if (activeTab === 2) {
+    if (activeTab === 3) {
       fetchDonations();
     }
   }, [activeTab]);
@@ -304,27 +309,27 @@ const AdminDashboard = () => {
         <div>
           <SectionTitle>Impact Dashboard</SectionTitle>
           <StatsContainer>
-            <StatCard delay="0.1s">
+            <StatCard $delay="0.1s">
               <StatNumber>{stats.totalDonations}</StatNumber>
               <StatLabel>Total Donations</StatLabel>
             </StatCard>
             
-            <StatCard delay="0.2s">
+            <StatCard $delay="0.2s">
               <StatNumber>{stats.totalDonors}</StatNumber>
               <StatLabel>Total Donors</StatLabel>
             </StatCard>
             
-            <StatCard delay="0.3s">
+            <StatCard $delay="0.3s">
               <StatNumber>{stats.totalNgos}</StatNumber>
               <StatLabel>Total NGOs</StatLabel>
             </StatCard>
             
-            <StatCard delay="0.4s">
+            <StatCard $delay="0.4s">
               <StatNumber>{stats.deliveredDonations}</StatNumber>
               <StatLabel>Delivered Donations</StatLabel>
             </StatCard>
             
-            <StatCard delay="0.5s">
+            <StatCard $delay="0.5s">
               <StatNumber>{stats.peopleServed}</StatNumber>
               <StatLabel>People Served (Estimate)</StatLabel>
             </StatCard>
@@ -332,7 +337,9 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {activeTab === 1 && (
+      {activeTab === 1 && <AnalyticsDashboard />}
+
+      {activeTab === 2 && (
         <div>
           <SectionTitle>Users Management</SectionTitle>
           <Table>
@@ -351,18 +358,18 @@ const AdminDashboard = () => {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <StatusBadge status={user.role === 'donor' ? 'available' : user.role === 'ngo' ? 'claimed' : 'delivered'}>
+                    <StatusBadge $status={user.role === 'donor' ? 'available' : user.role === 'ngo' ? 'claimed' : 'delivered'}>
                       {user.role}
                     </StatusBadge>
                   </TableCell>
                   <TableCell>
-                    <StatusBadge status={user.isActive ? 'available' : 'expired'}>
+                    <StatusBadge $status={user.isActive ? 'available' : 'expired'}>
                       {user.isActive ? 'Active' : 'Blocked'}
                     </StatusBadge>
                   </TableCell>
                   <TableCell>
                     <ActionButton 
-                      type={user.isActive ? 'block' : 'unblock'}
+                      $type={user.isActive ? 'block' : 'unblock'}
                       onClick={() => handleToggleUserStatus(user._id)}
                     >
                       {user.isActive ? 'Block' : 'Unblock'}
@@ -375,7 +382,7 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {activeTab === 2 && (
+      {activeTab === 3 && (
         <div>
           <SectionTitle>All Donations</SectionTitle>
           <Table>
@@ -385,6 +392,7 @@ const AdminDashboard = () => {
                 <TableHeader>Donor</TableHeader>
                 <TableHeader>Quantity</TableHeader>
                 <TableHeader>Status</TableHeader>
+                <TableHeader>Food Quality</TableHeader>
                 <TableHeader>Created</TableHeader>
               </TableRow>
             </TableHead>
@@ -395,9 +403,21 @@ const AdminDashboard = () => {
                   <TableCell>{donation.donor?.name}</TableCell>
                   <TableCell>{donation.quantity} {donation.unit}</TableCell>
                   <TableCell>
-                    <StatusBadge status={donation.status}>
+                    <StatusBadge $status={donation.status}>
                       {donation.status.charAt(0).toUpperCase() + donation.status.slice(1)}
                     </StatusBadge>
+                  </TableCell>
+                  <TableCell>
+                    {donation.foodQuality ? (
+                      <StatusBadge 
+                        $status={donation.foodQuality.isSafeForDonation ? 'available' : 'expired'}
+                        style={{ color: getQualityLevelColor(donation.foodQuality.qualityLevel) }}
+                      >
+                        {donation.foodQuality.qualityLevel} ({donation.foodQuality.qualityScore}/10)
+                      </StatusBadge>
+                    ) : (
+                      <span>Not assessed</span>
+                    )}
                   </TableCell>
                   <TableCell>{new Date(donation.createdAt).toLocaleDateString()}</TableCell>
                 </TableRow>
@@ -406,6 +426,9 @@ const AdminDashboard = () => {
           </Table>
         </div>
       )}
+
+      {activeTab === 4 && <FoodQualityDashboard />}
+      
     </DashboardLayout>
   );
 };
