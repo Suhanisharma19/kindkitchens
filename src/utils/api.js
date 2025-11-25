@@ -2,7 +2,9 @@ import axios from 'axios';
 
 // Create an axios instance with default configuration
 const api = axios.create({
-  baseURL: '/api', // This will be proxied to localhost:5000 in development
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? 'https://kindkitchens.onrender.com/api' 
+    : '/api', // This will be proxied to localhost:5000 in development
   headers: {
     'Content-Type': 'application/json'
   }
